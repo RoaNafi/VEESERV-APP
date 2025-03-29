@@ -14,7 +14,7 @@ import Icon from 'react-native-vector-icons/FontAwesome'; // Import the Icon com
 import styles from './LoginStyle';
 import Colors from '../../Components/Colors/Colors'; // Import your color palette
 import UserTypeSelection from '../RoleSelection/RoleSelection'; // Import the UserTypeSelection modal
-import Logo from '../../assets/Logo/LogoVEESERV.png'; // Replace with your logo image path
+import Logo from '../../assets/Logo/LogoVEESERV-Blue.png'; // Replace with your logo image path
 
 const Login = ({ navigation }) => {
   const [email_address, setEmail] = useState('');

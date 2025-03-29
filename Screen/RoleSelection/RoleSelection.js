@@ -38,7 +38,7 @@ const UserTypeSelection = ({ isVisible, onClose, onSelectType }) => {
         <Animated.View style={[styles.modalContainer, { transform: [{ scale: scaleValue }] }]}>
           {/* Logo */}
           <Image
-            source={require('../../assets/Logo/LogoVEESERV.png')}
+            source={require('../../assets/Logo/LogoVEESERV-Blue.png')}
             style={styles.logo}
           />
 

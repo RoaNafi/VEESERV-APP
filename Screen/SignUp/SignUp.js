@@ -16,6 +16,7 @@ import styles from './SignUpStyle';
 import Colors from '../../Components/Colors/Colors';
 import { Ionicons } from '@expo/vector-icons'; // For the eye and location icons
 import * as Location from 'expo-location'; // For geolocation
+import Logo from '../../assets/Logo/LogoVEESERV-Blue.png'; // Replace with your logo image path
 
 const SignUp = ({ route, navigation }) => {
   // State for form fields
@@ -172,7 +173,7 @@ const SignUp = ({ route, navigation }) => {
     >
       {/* Logo */}
       <Image
-        source={require('../../assets/Logo/LogoVEESERV.png')}
+        source={Logo}
         style={styles.logo}
       />
 
