@@ -299,7 +299,7 @@ const SignUp = ({ route, navigation }) => {
             onPress={() => setShowPassword(!showPassword)}
           >
             <Ionicons
-              name={showPassword ? 'eye-off' : 'eye'}
+              name={showPassword ? 'eye' : 'eye-off'}
               size={24}
               color={Colors.gray}
             />

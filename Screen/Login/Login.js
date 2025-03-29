@@ -10,11 +10,11 @@ import {
   ActivityIndicator,
   Animated,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome'; // Import the Icon component
 import styles from './LoginStyle';
 import Colors from '../../Components/Colors/Colors'; // Import your color palette
 import UserTypeSelection from '../RoleSelection/RoleSelection'; // Import the UserTypeSelection modal
 import Logo from '../../assets/Logo/LogoVEESERV-Blue.png'; // Replace with your logo image path
+import { Ionicons } from '@expo/vector-icons'; // For the eye and location icons
 
 const Login = ({ navigation }) => {
   const [email_address, setEmail] = useState('');
@@ -148,23 +148,25 @@ const Login = ({ navigation }) => {
         <View style={styles.inputContainer}>
           <Animated.Text style={passwordLabelStyle}>Password</Animated.Text>
           <TextInput
+            key={showPassword ? 'visible' : 'hidden'} 
+            secureTextEntry={!showPassword} 
+            autoCorrect={false}
             style={styles.input}
             value={password}
             onChangeText={setPassword}
-            secureTextEntry={!showPassword} // Toggle secureTextEntry based on showPassword
             onFocus={() => handleFocus(passwordAnim, setPasswordFocused)}
             onBlur={() => handleBlur(passwordAnim, setPasswordFocused, password)}
           />
           <TouchableOpacity
-            style={styles.eyeIcon}
-            onPress={() => setShowPassword(!showPassword)} // Toggle password visibility
-          >
-            <Icon
-              name={showPassword ? 'eye' : 'eye-slash'} // Change icon based on showPassword
-              size={20}
-              color={Colors.gray}
-            />
-          </TouchableOpacity>
+                      style={styles.showPasswordButton}
+                      onPress={() => setShowPassword(!showPassword)}
+                    >
+                      <Ionicons
+                        name={showPassword ? 'eye' : 'eye-off'}
+                        size={24}
+                        color={Colors.gray}
+                      />
+            </TouchableOpacity>
         </View>
 
         {/* Error Message */}

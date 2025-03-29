@@ -77,7 +77,7 @@ export default StyleSheet.create({
     marginBottom: height * 0.02,
     textAlign: 'center',
   },
-  eyeIcon: {
+  showPasswordButton: {
     position: 'absolute',
     right: 10,
     top: '50%',
