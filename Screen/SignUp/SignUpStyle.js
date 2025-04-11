@@ -16,10 +16,10 @@ export default StyleSheet.create({
     marginTop: height * 0.05, // Add some margin at the top
   },
   scrollContainer: {
-    flexGrow: 1,
+    //flexGrow: 1,
     justifyContent: 'center',
     paddingHorizontal: width * 0.1,
-    paddingBottom: height * 0.05, // Add some padding at the bottom
+    paddingBottom: height * 0.05,
   },
   title: {
     fontSize: width * 0.06,

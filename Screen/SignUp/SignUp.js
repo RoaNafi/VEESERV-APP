@@ -18,6 +18,9 @@ import { Ionicons } from '@expo/vector-icons'; // For the eye and location icons
 import * as Location from 'expo-location'; // For geolocation
 import Logo from '../../assets/Logo/LogoVEESERV-Blue.png'; // Replace with your logo image path
 
+
+import { useEffect } from 'react';
+
 const SignUp = ({ route, navigation }) => {
   // State for form fields
   const [first_name, setFirstName] = useState('');
@@ -48,9 +51,73 @@ const SignUp = ({ route, navigation }) => {
   const addressAnim = useRef(new Animated.Value(0)).current;
   const workshopNameAnim = useRef(new Animated.Value(0)).current;
 
-  // Handle location fetch
+
+/*
+
+this handleGetLocation retrieve the address from the API.
+If that doesn't work, it will continue with a fake address.
+
+this is so i can use it in the emulator  
+
+*/
+
+
   const handleGetLocation = async () => {
     try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+  
+      if (status !== 'granted') {
+        Alert.alert('Permission Denied', 'Location permission not granted.');
+        return;
+      }
+  
+      const location = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High });
+  
+      const { latitude, longitude } = location.coords;
+  
+      let road = "Test Street";
+      let city = "Test City";
+  
+      try {
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`,
+          {
+            headers: {
+              'User-Agent': 'veeserv-app/1.0',
+            },
+          }
+        );
+  
+        if (response.ok) {
+          const data = await response.json();
+          road = data.address?.road || "Unknown Street";
+          city = data.address?.city || "Unknown City";
+        } else {
+          console.warn("🌐 API response not OK, using fallback address.");
+        }
+      } catch (apiError) {
+        console.warn("🌐 API fetch failed, using fallback address.");
+      }
+  
+      setAddress({
+        street: road,
+        city: city,
+        lat: latitude.toString(),
+        lng: longitude.toString(),
+      });
+  
+      animateLabelUp(addressAnim);
+  
+    } catch (error) {
+      Alert.alert('Error', `Location error: ${error.message}`);
+    }
+  };
+/*  
+  // Handle location fetch original 
+  const handleGetLocation = async () => {
+    try {
+
+
       // Request location permissions
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
@@ -61,6 +128,8 @@ const SignUp = ({ route, navigation }) => {
       // Get the user's current location
       const location = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High });
       const { latitude, longitude } = location.coords;
+
+     // console.log("📍 Got location:", location);
 
       // Fetch the address using OpenStreetMap Nominatim API
       const response = await fetch(
@@ -73,6 +142,7 @@ const SignUp = ({ route, navigation }) => {
 
       const data = await response.json();
       const { road, city } = data.address;
+      
 
       // Update the address state
       setAddress({
@@ -83,13 +153,25 @@ const SignUp = ({ route, navigation }) => {
       });
 
       // Trigger the floating label animation
-      handleFocus(addressAnim);
+      animateLabelUp(addressAnim);
+
+      
     } catch (error) {
       console.error('Error fetching location:', error);
       Alert.alert('Error', 'Unable to fetch your location. Please try again.');
     }
   };
+*/
 
+
+
+  useEffect(() => {
+    if (address.street) {
+      animateLabelUp(addressAnim);
+    } else {
+      handleBlur(addressAnim, '');
+    }
+  }, [address.street]);
   // Password validation
   const validatePassword = (password) => {
     const minLength = password.length >= 6;
@@ -100,14 +182,16 @@ const SignUp = ({ route, navigation }) => {
 
   // Handle sign-up (without API)
   const handleSignUp = () => {
-    if (!first_name || !last_name || !email_address || !password || !phone_number || !address.street) {
-      setError('Please fill in all fields.');
+    if (!first_name || !last_name || !email_address || !password) {
+      setError('Please fill in all required fields.');
       return;
     }
 
-    if (role === 'Mechanic' && !workshop_name) {
-      setError('Please enter your workshop name.');
-      return;
+    if (role === 'Mechanic') {
+      if (!phone_number || !address.street || !workshop_name) {
+        setError('Please fill in all required fields for mechanic registration.');
+        return;
+      }
     }
 
     if (!validatePassword(password)) {
@@ -126,7 +210,7 @@ const SignUp = ({ route, navigation }) => {
       } else {
         navigation.navigate('ProfilePicture', { role });
       }
-    }, 1000); // Simulate a delay for loading
+    }, 1000);
   };
 
   // Floating label styles
@@ -148,7 +232,7 @@ const SignUp = ({ route, navigation }) => {
   });
 
   // Handle focus and blur for floating labels
-  const handleFocus = (anim) => {
+  const animateLabelUp = (anim) => {
     Animated.timing(anim, {
       toValue: 1,
       duration: 200,
@@ -184,7 +268,7 @@ const SignUp = ({ route, navigation }) => {
       >
         {/* Title */}
         <Text style={styles.title}>Create Your Account</Text>
-        <Text style={styles.subtitle}>Let’s get you started!</Text>
+        <Text style={styles.subtitle}>Let's get you started!</Text>
 
         {/* First Name Input */}
         <View style={styles.inputContainer}>
@@ -195,7 +279,7 @@ const SignUp = ({ route, navigation }) => {
             style={styles.input}
             value={first_name}
             onChangeText={setFirstName}
-            onFocus={() => handleFocus(firstNameAnim)}
+            onFocus={() => animateLabelUp(firstNameAnim)}
             onBlur={() => handleBlur(firstNameAnim, first_name)}
           />
         </View>
@@ -209,27 +293,11 @@ const SignUp = ({ route, navigation }) => {
             style={styles.input}
             value={last_name}
             onChangeText={setLastName}
-            onFocus={() => handleFocus(lastNameAnim)}
+            onFocus={() => animateLabelUp(lastNameAnim)}
             onBlur={() => handleBlur(lastNameAnim, last_name)}
           />
         </View>
-
-        {/* Workshop Name Input (for Mechanics) */}
-        {role === 'Mechanic' && (
-          <View style={styles.inputContainer}>
-            <Animated.Text style={floatingLabelStyle(workshopNameAnim)}>
-              Workshop Name
-            </Animated.Text>
-            <TextInput
-              style={styles.input}
-              value={workshop_name}
-              onChangeText={setWorkshopName}
-              onFocus={() => handleFocus(workshopNameAnim)}
-              onBlur={() => handleBlur(workshopNameAnim, workshop_name)}
-            />
-          </View>
-        )}
-
+        
         {/* Email Input */}
         <View style={styles.inputContainer}>
           <Animated.Text style={floatingLabelStyle(emailAnim)}>
@@ -241,44 +309,9 @@ const SignUp = ({ route, navigation }) => {
             onChangeText={setEmailAddress}
             keyboardType="email-address"
             autoCapitalize="none"
-            onFocus={() => handleFocus(emailAnim)}
+            onFocus={() => animateLabelUp(emailAnim)}
             onBlur={() => handleBlur(emailAnim, email_address)}
           />
-        </View>
-
-        {/* Phone Number Input */}
-        <View style={styles.inputContainer}>
-          <Animated.Text style={floatingLabelStyle(phoneNumberAnim)}>
-            Phone Number
-          </Animated.Text>
-          <TextInput
-            style={styles.input}
-            value={phone_number}
-            onChangeText={setPhoneNumber}
-            keyboardType="phone-pad"
-            onFocus={() => handleFocus(phoneNumberAnim)}
-            onBlur={() => handleBlur(phoneNumberAnim, phone_number)}
-          />
-        </View>
-
-        {/* Address Input */}
-        <View style={styles.inputContainer}>
-          <Animated.Text style={floatingLabelStyle(addressAnim)}>
-            Address
-          </Animated.Text>
-          <TextInput
-            style={styles.addressInput}
-            value={address.street ? `${address.street}, ${address.city}` : ''}
-            placeholder="                   click on the icon"
-            placeholderTextColor="#A0A0A0"
-            editable={false}
-          />
-          <TouchableOpacity
-            style={styles.locationButton}
-            onPress={handleGetLocation}
-          >
-            <Ionicons name="location" size={24} color={Colors.blue} />
-          </TouchableOpacity>
         </View>
 
         {/* Password Input */}
@@ -291,7 +324,7 @@ const SignUp = ({ route, navigation }) => {
             value={password}
             onChangeText={setPassword}
             secureTextEntry={!showPassword}
-            onFocus={() => handleFocus(passwordAnim)}
+            onFocus={() => animateLabelUp(passwordAnim)}
             onBlur={() => handleBlur(passwordAnim, password)}
           />
           <TouchableOpacity
@@ -305,6 +338,72 @@ const SignUp = ({ route, navigation }) => {
             />
           </TouchableOpacity>
         </View>
+
+        {/* Additional fields for Mechanics */}
+        {role === 'Mechanic' && (
+          <>
+            {/* Workshop Name Input */}
+            <View style={styles.inputContainer}>
+              <Animated.Text style={floatingLabelStyle(workshopNameAnim)}>
+                Workshop Name
+              </Animated.Text>
+              <TextInput
+                style={styles.input}
+                value={workshop_name}
+                onChangeText={setWorkshopName}
+                onFocus={() => animateLabelUp(workshopNameAnim)}
+                onBlur={() => handleBlur(workshopNameAnim, workshop_name)}
+              />
+            </View>
+
+            {/* Phone Number Input */}
+            <View style={styles.inputContainer}>
+              <Animated.Text style={floatingLabelStyle(phoneNumberAnim)}>
+                Phone Number
+              </Animated.Text>
+              <TextInput
+                style={styles.input}
+                value={phone_number}
+                onChangeText={setPhoneNumber}
+                keyboardType="phone-pad"
+                onFocus={() => animateLabelUp(phoneNumberAnim)}
+                onBlur={() => handleBlur(phoneNumberAnim, phone_number)}
+              />
+            </View>
+
+            {/* Address Input */}
+            <View style={styles.inputContainer}>
+  {address.street !== '' && (
+    <Animated.Text style={floatingLabelStyle(addressAnim)}>
+      Address
+    </Animated.Text>
+  )}
+
+  <TextInput
+     style={[
+      styles.addressInput,
+      address.street === '' && { color: '#A0A0A0' }, // لون placeholder
+    ]}
+    value={
+      address.street
+        ? `${address.street}, ${address.city}`
+        : 'click on the icon'
+    }
+    editable={false}
+    
+  />
+
+  <TouchableOpacity
+    style={styles.locationButton}
+    onPress={handleGetLocation}
+  >
+    <Ionicons name="location" size={24} color={Colors.blue} />
+  </TouchableOpacity>
+</View>
+
+
+          </>
+        )}
 
         {/* Error Message */}
         {error ? <Text style={styles.errorText}>{error}</Text> : null}

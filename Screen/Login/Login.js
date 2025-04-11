@@ -11,36 +11,27 @@ import {
   Animated,
 } from 'react-native';
 import styles from './LoginStyle';
-import Colors from '../../Components/Colors/Colors'; // Import your color palette
-import UserTypeSelection from '../RoleSelection/RoleSelection'; // Import the UserTypeSelection modal
-import Logo from '../../assets/Logo/LogoVEESERV-Blue.png'; // Replace with your logo image path
-import { Ionicons } from '@expo/vector-icons'; // For the eye and location icons
+import Colors from '../../Components/Colors/Colors';
+import UserTypeSelection from '../RoleSelection/RoleSelection';
+import Logo from '../../assets/Logo/LogoVEESERV-Blue.png';
+import { Ionicons } from '@expo/vector-icons';
 
 const Login = ({ navigation }) => {
+
+  // States
   const [email_address, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [emailFocused, setEmailFocused] = useState(false);
-  const [passwordFocused, setPasswordFocused] = useState(false);
-  const [isModalVisible, setIsModalVisible] = useState(false); // State for modal visibility
-  const [showPassword, setShowPassword] = useState(false); // State for password visibility
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const emailAnim = useState(new Animated.Value(0))[0];
   const passwordAnim = useState(new Animated.Value(0))[0];
 
-  const validateEmail = (email_address) => {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(String(email_address).toLowerCase());
-  };
+  
 
-  const validatePassword = (password) => {
-    const minLength = password.length >= 6;
-    const hasUpperCase = /[A-Z]/.test(password);
-    const hasLowerCase = /[a-z]/.test(password);
-    return minLength && hasUpperCase && hasLowerCase;
-  };
-
+  // Handle Login
   const handleLogin = () => {
     if (!email_address || !password) {
       setError('Please fill in all fields.');
@@ -52,23 +43,26 @@ const Login = ({ navigation }) => {
       return;
     }
 
-    if (!validatePassword(password)) {
-      setError('Password must be 6+ characters with both uppercase and lowercase letters.');
-      return;
-    }
-
     setLoading(true);
     setError('');
 
-    // Simulate a login request
     setTimeout(() => {
       setLoading(false);
       alert('Logged In!');
-    }, 1000);
+    }, 1000); // TODO: Remove this untel we have a backend
   };
 
-  const handleFocus = (anim, setFocused) => {
-    setFocused(true);
+  // Validations
+
+  const validateEmail = (email_address) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email_address).toLowerCase());
+  };
+
+
+  // Focus and Blur
+
+  const handleFocus = (anim) => {
     Animated.timing(anim, {
       toValue: 1,
       duration: 200,
@@ -76,9 +70,8 @@ const Login = ({ navigation }) => {
     }).start();
   };
 
-  const handleBlur = (anim, setFocused, value) => {
+  const handleBlur = (anim, value) => {
     if (!value) {
-      setFocused(false);
       Animated.timing(anim, {
         toValue: 0,
         duration: 200,
@@ -121,13 +114,13 @@ const Login = ({ navigation }) => {
     }),
   };
 
+  // Render
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}
     >
       <View style={styles.innerContainer}>
-        {/* Logo */}
         <Image source={Logo} style={styles.logo} />
 
         {/* Email Input */}
@@ -139,8 +132,8 @@ const Login = ({ navigation }) => {
             onChangeText={setEmail}
             keyboardType="email-address"
             autoCapitalize="none"
-            onFocus={() => handleFocus(emailAnim, setEmailFocused)}
-            onBlur={() => handleBlur(emailAnim, setEmailFocused, email_address)}
+            onFocus={() => handleFocus(emailAnim)}
+            onBlur={() => handleBlur(emailAnim, email_address)}
           />
         </View>
 
@@ -148,31 +141,29 @@ const Login = ({ navigation }) => {
         <View style={styles.inputContainer}>
           <Animated.Text style={passwordLabelStyle}>Password</Animated.Text>
           <TextInput
-            key={showPassword ? 'visible' : 'hidden'} 
-            secureTextEntry={!showPassword} 
+            key={showPassword ? 'visible' : 'hidden'}
+            secureTextEntry={!showPassword}
             autoCorrect={false}
             style={styles.input}
             value={password}
             onChangeText={setPassword}
-            onFocus={() => handleFocus(passwordAnim, setPasswordFocused)}
-            onBlur={() => handleBlur(passwordAnim, setPasswordFocused, password)}
+            onFocus={() => handleFocus(passwordAnim)}
+            onBlur={() => handleBlur(passwordAnim, password)}
           />
           <TouchableOpacity
-                      style={styles.showPasswordButton}
-                      onPress={() => setShowPassword(!showPassword)}
-                    >
-                      <Ionicons
-                        name={showPassword ? 'eye' : 'eye-off'}
-                        size={24}
-                        color={Colors.gray}
-                      />
-            </TouchableOpacity>
+            style={styles.showPasswordButton}
+            onPress={() => setShowPassword(!showPassword)}
+          >
+            <Ionicons
+              name={showPassword ? 'eye' : 'eye-off'}
+              size={24}
+              color={Colors.gray}
+            />
+          </TouchableOpacity>
         </View>
 
-        {/* Error Message */}
         {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
-        {/* Login Button */}
         <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
           {loading ? (
             <ActivityIndicator color={Colors.white} />
@@ -181,28 +172,25 @@ const Login = ({ navigation }) => {
           )}
         </TouchableOpacity>
 
-        {/* Forgot Password */}
         <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
           <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
         </TouchableOpacity>
 
-        {/* Footer */}
         <Text style={styles.footerText}>
-          Don’t have an account?{' '}
+          Don't have an account?{' '}
           <Text
             style={styles.signUpLink}
-            onPress={() => setIsModalVisible(true)} // Show the modal when login is clicked
+            onPress={() => setIsModalVisible(true)}
           >
             Sign up
           </Text>
         </Text>
 
-        {/* User Type Selection Modal */}
         <UserTypeSelection
           isVisible={isModalVisible}
           onClose={() => setIsModalVisible(false)}
           onSelectType={(type) => {
-            navigation.navigate('SignUp', { userType: type }); // Pass the selected type to SignUp
+            navigation.navigate('SignUp', { userType: type });
           }}
         />
       </View>
