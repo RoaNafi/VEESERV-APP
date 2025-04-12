@@ -2,8 +2,6 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import { NativeBaseProvider } from 'native-base';
-
 
 import Login from './Screen/Login/Login';
 import SignUp from './Screen/SignUp/SignUp';
@@ -51,7 +49,6 @@ function RegNavigator() {
 
 export default function App() {
   return (
-    <NativeBaseProvider>
     <NavigationContainer>
       <RootStack.Navigator screenOptions={{ headerShown: false }}>
         {/* Intro Screens */}
@@ -72,6 +69,6 @@ export default function App() {
 
       </RootStack.Navigator>
     </NavigationContainer>
-    </NativeBaseProvider>
+    
   );
 }

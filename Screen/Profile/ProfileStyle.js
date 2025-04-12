@@ -12,12 +12,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     marginTop: height * 0.08,
   },
-  title: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: Colors.darkBlue,
-    marginBottom: 16,
-  },
+ 
   avatar: {
     width: width * 0.35,
     height: width * 0.35,
@@ -31,8 +26,8 @@ export default StyleSheet.create({
     marginBottom: 6,
   },
   info: {
-    fontSize: 18,
-    color: Colors.gray,
+    fontSize: 16,
+    color: Colors.darkGray,
     marginBottom: 2,
   },
   menuContainer: {
@@ -41,6 +36,8 @@ export default StyleSheet.create({
   },
   menuItem: {
     backgroundColor: Colors.lightGray,
+   // borderColor: Colors.darkGray,
+   // borderWidth: 1,
     paddingVertical: 14,
     paddingHorizontal: 18,
     borderRadius: 10,
@@ -55,9 +52,11 @@ export default StyleSheet.create({
   },
   menuIcon: {
     marginRight: 14,
+    fontSize: 22,
+    color: Colors.darkGray,
   },
   menuLabel: {
-    fontSize: 16,
+    fontSize: 18,
     color: Colors.darkGray,
   },
   logoutContainer: {
@@ -76,4 +75,34 @@ export default StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+
+  quickActionsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    marginTop: 30,
+    paddingHorizontal: 20,
+  },
+
+
+
+  doubleRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 10,
+    marginBottom: 12,
+  },
+  
+  halfMenuItem: {
+    flex: 1,
+    backgroundColor: Colors.lightGray,
+    paddingVertical: 14,
+    paddingHorizontal: 18,
+    borderRadius: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  
+  
+  
 });
