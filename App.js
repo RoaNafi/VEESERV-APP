@@ -2,6 +2,8 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
+import { NativeBaseProvider } from 'native-base';
+
 
 import Login from './Screen/Login/Login';
 import SignUp from './Screen/SignUp/SignUp';
@@ -12,13 +14,14 @@ import RoleSelection from './Screen/RoleSelection/RoleSelection';
 import ProfilePicture from './Screen/ProfilePicture/ProfilePicture';
 import Home from './Screen/Home/Home';
 import WorkingHours from './Screen/WorkingHours/WorkingHours';
-
+import Profile from './Screen/Profile/Profile';
 const Stack = createStackNavigator();
 const RootStack = createStackNavigator();
 
 function IntroNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
+      {<Stack.Screen name="Profile" component={Profile} />}
       <Stack.Screen name="Intro1">
         {props => <Intro1 {...props} activeDotIndex={1} />}
       </Stack.Screen>
@@ -48,6 +51,7 @@ function RegNavigator() {
 
 export default function App() {
   return (
+    <NativeBaseProvider>
     <NavigationContainer>
       <RootStack.Navigator screenOptions={{ headerShown: false }}>
         {/* Intro Screens */}
@@ -68,5 +72,6 @@ export default function App() {
 
       </RootStack.Navigator>
     </NavigationContainer>
+    </NativeBaseProvider>
   );
 }
