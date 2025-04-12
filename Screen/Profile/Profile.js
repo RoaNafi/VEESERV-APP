@@ -9,6 +9,7 @@ import {
 import styles from './ProfileStyle';
 import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
 
+
 const Profile = ({ navigation }) => {
   const user = {
     name: 'test info',
@@ -18,16 +19,16 @@ const Profile = ({ navigation }) => {
   };
 
   const menuItems = [
-    // زرّين جنب بعض
+    
     {
       type: 'double',
       items: [
-        { icon: 'create-outline', label: 'ُEdit Profile', action: () => navigation.navigate('UpdateProfile') },
+        { icon: 'create-outline', label: 'ُEdit Profile', action: () => navigation.navigate('Edit Profile') },
         { icon: 'car', label: 'Garage', action: () => navigation.navigate('Garage') }
       ]
     },
   
-    // باقي القائمة
+  
     { icon: 'time', label: 'History', action: () => navigation.navigate('History') },
     { icon: 'globe', label: 'Language', action: () => navigation.navigate('Language') },
     { icon: 'key', label: 'Change Password', action: () => navigation.navigate('ChangePassword') },
@@ -75,17 +76,20 @@ const Profile = ({ navigation }) => {
           onPress={item.action}
         >
           <View style={styles.menuItemLeft}>
+            { !item.isLogout &&(
             <Ionicons
               name={item.icon}
               style={[styles.menuIcon, item.isLogout && { color: 'red' }]}
             />
-            <Text style={[styles.menuLabel, item.isLogout && { color: 'red' }]}>{item.label}</Text>
+           )}
+            <Text style={[styles.menuLabel, item.isLogout && styles.logoutText]}>{item.label}</Text>
           </View>
-          <Ionicons
-            name="chevron-forward"
-            size={20}
-            style={item.isLogout && { color: 'red' }}
-          />
+          {!item.isLogout && (
+            <Ionicons
+              name="chevron-forward"
+              size={20}
+            />
+          )}
         </TouchableOpacity>
       );
     }

@@ -40,18 +40,12 @@ export default StyleSheet.create({
   },
   option: {
     width: '100%',
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.lightGray,
     borderRadius: width * 0.02,
-    borderWidth: 1,
-    borderColor: Colors.grayLight,
     paddingVertical: height * 0.02,
     paddingHorizontal: width * 0.04,
     marginBottom: height * 0.02,
-    shadowColor: Colors.black,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+
   },
   optionText: {
     fontSize: width * 0.04,

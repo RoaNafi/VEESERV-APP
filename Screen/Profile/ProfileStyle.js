@@ -59,30 +59,17 @@ export default StyleSheet.create({
     fontSize: 18,
     color: Colors.darkGray,
   },
-  logoutContainer: {
-    alignItems: 'center',
-    marginTop: 40,
-    marginBottom: 30,
-  },
-  logoutButton: {
-    backgroundColor: Colors.red,
-    paddingVertical: 12,
-    paddingHorizontal: 40,
-    borderRadius: 8,
-  },
-  logoutText: {
-    color: Colors.white,
-    fontSize: 16,
+
+  logoutText:{
+    color: Colors.red ,
+    flex: 1, 
+    textAlign: 'center',
+    fontSize: 20,
     fontWeight: 'bold',
-  },
+    
 
-  quickActionsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    marginTop: 30,
-    paddingHorizontal: 20,
   },
-
+ 
 
 
   doubleRow: {

@@ -34,7 +34,7 @@ export default StyleSheet.create({
     justifyContent: "space-between",
   },
   heading: {
-    color: Colors.grayDark,
+    color: Colors.darkGray,
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 10,
@@ -63,7 +63,7 @@ export default StyleSheet.create({
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: Colors.grayLight,
+    backgroundColor: Colors.mediumGray,
     marginHorizontal: 5,
   },
   activeDot: {
@@ -77,8 +77,7 @@ export default StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
   },
-  backButton: {  
-  },
+ 
   nextButtonText: {
     color: Colors.white,
     fontSize: 16,

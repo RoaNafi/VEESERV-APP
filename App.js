@@ -2,24 +2,31 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-
-import Login from './Screen/Login/Login';
-import SignUp from './Screen/SignUp/SignUp';
 import Intro1 from './Screen/Intro/IntroScreen1';
 import Intro2 from './Screen/Intro/IntroScreen2';
 import Intro3 from './Screen/Intro/IntroScreen3';
+
+import Login from './Screen/Login/Login';
+import SignUp from './Screen/SignUp/SignUp';
 import RoleSelection from './Screen/RoleSelection/RoleSelection';
-import ProfilePicture from './Screen/ProfilePicture/ProfilePicture';
-import Home from './Screen/Home/Home';
+
 import WorkingHours from './Screen/WorkingHours/WorkingHours';
+import ProfilePicture from './Screen/ProfilePicture/ProfilePicture';
+
+import Home from './Screen/Home/Home';
+
 import Profile from './Screen/Profile/Profile';
+import Garage from './Screen/Garage/Garage';
+import EditProfile from './Screen/EditProfile/EditProfile';
+
+
 const Stack = createStackNavigator();
 const RootStack = createStackNavigator();
 
 function IntroNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      {<Stack.Screen name="Profile" component={Profile} />}
+      
       <Stack.Screen name="Intro1">
         {props => <Intro1 {...props} activeDotIndex={1} />}
       </Stack.Screen>
@@ -41,34 +48,57 @@ function RegNavigator() {
       <Stack.Screen name="SignUp" component={SignUp} />
       <Stack.Screen name="WorkingHours" component={WorkingHours} />
       <Stack.Screen name="ProfilePicture" component={ProfilePicture} />
-    
       <Stack.Screen name="Home" component={Home} />
     </Stack.Navigator>
   );
 }
 
+
+function ProfileNavigator() {
+  return (
+    <Stack.Navigator>
+      
+      <Stack.Screen
+        name="Profile"
+        component={Profile}
+        options={{ headerShown: false }} 
+      />
+      <Stack.Screen
+        name="Garage"
+        component={Garage}
+      />
+       <Stack.Screen
+        name="Edit Profile"
+        component={EditProfile}
+      />
+    </Stack.Navigator>
+  );
+}
+
+
 export default function App() {
   return (
     <NavigationContainer>
-      <RootStack.Navigator screenOptions={{ headerShown: false }}>
+      <RootStack.Navigator screenOptions={{ headerShown: false }} >
+        {/* Profile Screens*/}
+        <RootStack.Screen
+          name="ProfileFlow"
+          component={ProfileNavigator}
+          
+        />
+
         {/* Intro Screens */}
         <RootStack.Screen
           name="IntroFlow"
           component={IntroNavigator}
-          options={{ headerShown: false }}
         />
 
-        {/* Regestration Screens */}
+        {/* Registration Screens */}
         <RootStack.Screen
           name="RegFlow"
           component={RegNavigator}
-          options={{ headerShown: false }}
         />
-
-       
-
       </RootStack.Navigator>
     </NavigationContainer>
-    
   );
 }
