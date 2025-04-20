@@ -20,6 +20,7 @@ import Garage from './Screen/Garage/Garage';
 import EditProfile from './Screen/EditProfile/EditProfile';
 
 
+
 const Stack = createStackNavigator();
 const RootStack = createStackNavigator();
 
@@ -81,11 +82,19 @@ export default function App() {
     <NavigationContainer>
       <RootStack.Navigator screenOptions={{ headerShown: false }} >
         {/* Profile Screens*/}
+        
+        
         <RootStack.Screen
+          name="Home"
+          component={Home}
+          
+        />
+
+        {/* <RootStack.Screen
           name="ProfileFlow"
           component={ProfileNavigator}
           
-        />
+        /> */}
 
         {/* Intro Screens */}
         <RootStack.Screen
