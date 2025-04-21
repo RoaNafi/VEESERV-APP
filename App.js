@@ -81,20 +81,18 @@ export default function App() {
   return (
     <NavigationContainer>
       <RootStack.Navigator screenOptions={{ headerShown: false }} >
-        {/* Profile Screens*/}
-        
-        
+        {/* Profile Screens*/
         <RootStack.Screen
           name="Home"
           component={Home}
           
-        />
+        />}
 
-        {/* <RootStack.Screen
+        { <RootStack.Screen
           name="ProfileFlow"
           component={ProfileNavigator}
           
-        /> */}
+        /> }
 
         {/* Intro Screens */}
         <RootStack.Screen
